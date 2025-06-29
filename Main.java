@@ -157,13 +157,27 @@ public class Main {
         Collections.shuffle(numbers);
 
         for (int num : numbers) {
-            if (isValid(row, col, num)) {
+            if (isValidForBoard(board, row, col, num)) {
                 board[row][col] = num;
                 if (fillBoard(board, row, col + 1)) return true;
                 board[row][col] = 0;
             }
         }
         return false;
+    }
+
+    public static boolean isValidForBoard(int[][] targetBoard, int row, int col, int num) {
+        for (int i = 0; i < SIZE; i++) {
+            if (targetBoard[row][i] == num || targetBoard[i][col] == num) return false;
+        }
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (targetBoard[startRow + i][startCol + j] == num) return false;
+            }
+        }
+        return true;
     }
 
     //========================= Puzzle Masking =========================//
@@ -271,6 +285,7 @@ public class Main {
                     sc.nextLine();
                 }
             } else if (choice.equals("2")) {
+                
                 generateFullBoard();
                 System.out.print("Select difficulty (1–10): ");
                 int diff = Math.max(1, Math.min(10, sc.nextInt()));
